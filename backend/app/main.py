@@ -1,15 +1,25 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 
 from app.api.v1.router import api_router
 from app.db.session import engine
 
 app = FastAPI(title="Peblo TV API")
+
+app.mount(
+    "/uploads",
+    StaticFiles(directory="uploads"),
+    name="uploads",
+)
+
 app.include_router(api_router)
+
 
 @app.get("/")
 def root():
     return {"message": "Peblo TV Backend Running 🚀"}
+
 
 @app.get("/health")
 def health():
@@ -18,5 +28,5 @@ def health():
 
     return {
         "status": "healthy",
-        "database": "connected"
+        "database": "connected",
     }
